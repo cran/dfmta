@@ -1,0 +1,3 @@
+useDynLib(dfmta, .registration = TRUE, .fixes="C_")
+export(mta_sim, print.mta_sim)
+export(mta_next, print.mta_next)
