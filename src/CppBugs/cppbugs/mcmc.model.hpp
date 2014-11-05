@@ -23,7 +23,6 @@
 #include <vector>
 #include <map>
 #include <exception>
-#include <boost/random.hpp>
 #include <cppbugs/mcmc.rng.hpp>
 #include <cppbugs/mcmc.object.hpp>
 #include <cppbugs/mcmc.stochastic.hpp>

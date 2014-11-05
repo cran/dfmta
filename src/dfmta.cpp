@@ -11,7 +11,7 @@
 
 #include <cppbugs/cppbugs.hpp>
 
-#include <boost/random.hpp>
+#include <boost/random/exponential_distribution.hpp>
 #include <cstdlib>
 
 #include <progress.hpp>
@@ -414,7 +414,7 @@ estimations estimate_ra(const trial_data& trial_data, int group, bool final) {
       resp_jk = eff_params.responseRate(id_dose_eff);
     pi_jk = tox_params.proba_tox(dose_tox);
   };
-  MCModel<boost::minstd_rand> m(model);
+  MCModel<std::minstd_rand> m(model);
 
   m.track<Normal>(eff_params.gamma0).dnorm(0, 0.01);
   m.track<Exponential>(eff_params.gamma1).dexp(1);
@@ -466,10 +466,7 @@ estimations estimate_ra(const trial_data& trial_data, int group, bool final) {
     result.pi[d] = median(pi_median);
   }
 
-  int counts[ndose];
-  for(int i = 0; i < ndose; i++) {
-    counts[i] = 0;
-  }
+  vector<int> counts(ndose, 0);
   for(int tau: m.getNode(eff_params.tau).history) {
     counts[tau]++;
   }
@@ -478,20 +475,18 @@ estimations estimate_ra(const trial_data& trial_data, int group, bool final) {
   }
 
   if(final) {
-    result.eff_params.tau = max_element(counts, counts+ndose)-counts;
+    result.eff_params.tau = max_element(counts.begin(), counts.end())-counts.begin();
   } else {
-    int nb_tau_poss = 0;
-    int tau_high_prob[ndose];
-    double prob_tau_high[ndose];
+    vector<int> tau_high_prob;
+    vector<double> prob_tau_high;
     double max_val = *max_element(result.proba_tau.begin(), result.proba_tau.end());
     for(int d=0; d<ndose; d++){
       if(max_val-result.proba_tau[d] <= trial_data.s_1[trial_data.pat_incl_group[group]]){
-        nb_tau_poss++;
-        tau_high_prob[nb_tau_poss-1] = d;
-        prob_tau_high[nb_tau_poss-1] = result.proba_tau[d];
+        tau_high_prob.push_back(d);
+        prob_tau_high.push_back(result.proba_tau[d]);
       }
     }
-    std::discrete_distribution<int> tau_rng(prob_tau_high, prob_tau_high+nb_tau_poss);
+    std::discrete_distribution<int> tau_rng(prob_tau_high.begin(), prob_tau_high.end());
     int sample = tau_rng(r);
     result.eff_params.tau = tau_high_prob[sample];
   }
@@ -588,7 +583,7 @@ estimations estimate_pm(const trial_data& trial_data, int group, bool) {
     resp_jk_weight = weights%eff_params.responseRate(id_dose_eff);
     pi_jk = tox_params.proba_tox(dose_tox);
   };
-  MCModel<boost::minstd_rand> m(model);
+  MCModel<std::minstd_rand> m(model);
 
   m.track<Normal>(eff_params.gamma0).dnorm(0, 0.01);
   m.track<Exponential>(eff_params.gamma1).dexp(1);
@@ -642,8 +637,8 @@ estimations estimate_pm(const trial_data& trial_data, int group, bool) {
   }
 
   /* Estimation of efficacy */
-  double qeff_inf_tau[ndose][ndose];
-  double resp_tau[ndose][ndose];
+  vector<vector<double> > qeff_inf_tau(ndose, vector<double>(ndose));
+  vector<vector<double> > resp_tau(ndose, vector<double>(ndose));
   for(int tau = 0; tau < ndose; tau++) {
     int count = 0;
     vector<double> gammas0, gammas1;
@@ -679,10 +674,7 @@ estimations estimate_pm(const trial_data& trial_data, int group, bool) {
       result.proba_tau[tau] = 0;
     }
   }
-  double proba_resp_BMA[ndose];
-  for(int d = 0; d < ndose; d++) {
-      proba_resp_BMA[d] = 0;
-  }
+  vector<double> proba_resp_BMA(ndose, 0);
   for(int d = 0; d < ndose; d++) {
     for(int tau = 0; tau < ndose; tau++) {
       proba_resp_BMA[d] += resp_tau[d][tau]*result.proba_tau[tau];
@@ -755,10 +747,7 @@ int find_next_dose(trial_data& trial_data, int group, double c_tox, double c_eff
   int nextdose = -1;
   const int cdose = trial_data.cdose[group];
 
-  int pat_explo_dose[ndose];
-  for(int j=0; j<ndose; j++){
-    pat_explo_dose[j] = 0;
-  }
+  vector<int> pat_explo_dose(ndose, 0);
   int highest_tested=0;
   for(int pat = 0; pat < trial_data.pat_incl; pat++){
     if(trial_data.group[pat] == group){

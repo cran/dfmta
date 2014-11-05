@@ -18,7 +18,9 @@
 #ifndef MCMC_RNG_HPP
 #define MCMC_RNG_HPP
 
-#include <boost/random.hpp>
+#include <boost/random/variate_generator.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/random/normal_distribution.hpp>
 #include <cppbugs/mcmc.rng.base.hpp>
 
 namespace cppbugs {

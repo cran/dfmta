@@ -21,8 +21,6 @@
 #include <stdexcept>
 #include <cmath>
 #include <armadillo>
-#include <boost/math/special_functions/gamma.hpp>
-#include <boost/math/special_functions/factorials.hpp>
 
 namespace cppbugs {
 
@@ -66,7 +64,7 @@ namespace cppbugs {
 
   /* ICSIlog V 2.0 */
   const std::vector<float> fill_icsi_log_table2(const unsigned int precision) {
-    std::vector<float> pTable(static_cast<size_t>(pow(2,precision)));
+    std::vector<float> pTable(1<<precision);
 
     /* step along table elements and x-axis positions
        (start with extra half increment, so the steps intersect at their midpoints.) */
@@ -86,11 +84,11 @@ namespace cppbugs {
     static std::vector<float> pTable = fill_icsi_log_table2(precision);
 
     /* get access to float bits */
-    register const int* const pVal = (const int*)(&val);
+    const int* const pVal = (const int*)(&val);
 
     /* extract exponent and mantissa (quantized) */
-    register const int exp = ((*pVal >> 23) & 255) - 127;
-    register const int man = (*pVal & 0x7FFFFF) >> (23 - precision);
+    const int exp = ((*pVal >> 23) & 255) - 127;
+    const int man = (*pVal & 0x7FFFFF) >> (23 - precision);
 
     /* exponent plus lookup refinement */
     return static_cast<double>(((float)(exp) + pTable[man]) * 0.69314718055995f);
@@ -166,15 +164,14 @@ namespace arma {
     }
 
     if(i > 100) {
-      return boost::math::lgamma(static_cast<double>(i) + 1);
+      return ::lgamma(double(i) + 1);
     }
 
     if(factln_table.size() < static_cast<size_t>(i+1)) {
       for(int j = factln_table.size(); j < (i+1); j++) {
-        factln_table.push_back(std::log(boost::math::factorial<double>(static_cast<double>(j))));
+        factln_table.push_back(::lgamma(double(j) + 1));
       }
     }
-    //for(auto v : factln_table) { std::cout << v << "|"; }  std::cout << std::endl;
     return factln_table[i];
   }
 
