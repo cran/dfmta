@@ -1,4 +1,4 @@
-12c3b3e841f78ac7bffd0950ad11b437 *DESCRIPTION
+28a74514e747b82abb32ab1d6260b9aa *DESCRIPTION
 1c79fe817a63609b446bb350f7115a38 *NAMESPACE
 bab7ee4b3af4ab398393265b5bd5f3cd *R/dfmta.R
 5f5e3d222805c83a4c1dd483b43878e8 *man/dfmta-package.Rd
@@ -27,6 +27,6 @@ f8e02ec52332b300c312f442a0496316 *src/CppBugs/cppbugs/mcmc.observed.hpp
 9f8f426003d7292cdc4b759a8959161c *src/CppBugs/cppbugs/mcmc.rng.base.hpp
 1f5bd451fc1846f4742f760c0e204ec0 *src/CppBugs/cppbugs/mcmc.rng.hpp
 e16c392579b242b2f76f3b1874d0417c *src/CppBugs/cppbugs/mcmc.stochastic.hpp
-5e4b8d4f2428f7a9b9e127d19ef059be *src/Makevars
-054767c7c14c849796b9b88a68d18f8b *src/Makevars.win
-c4382b03d55a056eac2dc4d29cdfd52a *src/dfmta.cpp
+1da833458ace88f9920cbb17b28dd28a *src/Makevars
+1da833458ace88f9920cbb17b28dd28a *src/Makevars.win
+3a45fd0dde9b04f7b5234e212e8f66c9 *src/dfmta.cpp

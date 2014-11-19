@@ -1,6 +1,8 @@
 #include<R.h>
 
 #define BOOST_DISABLE_ASSERTS
+#define ARMA_DONT_USE_BLAS
+#define ARMA_DONT_USE_LAPACK
 
 #include <RcppArmadillo.h>
 
