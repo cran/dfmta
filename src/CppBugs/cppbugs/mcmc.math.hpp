@@ -361,7 +361,7 @@ namespace cppbugs {
     if(chol(R,sigma) == false) { return -std::numeric_limits<double>::infinity(); }
 
     // otherwise calc logp
-    return -arma::accu(x.n_elem * log_2pi + log_approx(arma::det(sigma)) + mahalanobis(x,mu,sigma))/2;
+    return -(x.n_elem * log_2pi + log_approx(arma::det(sigma)) + mahalanobis(x,mu,sigma))/2;
   }
 
   // sigma denotes cov matrix rather than precision matrix
@@ -373,7 +373,7 @@ namespace cppbugs {
     if(chol(R,sigma) == false) { return -std::numeric_limits<double>::infinity(); }
 
     // otherwise calc logp
-    return -arma::accu(x.n_elem * log_2pi + log_approx(arma::det(sigma)) + mahalanobis(x,mu,sigma))/2;
+    return -(x.n_elem * log_2pi + log_approx(arma::det(sigma)) + mahalanobis(x,mu,sigma))/2;
   }
 
   template<typename T, typename U, typename V>

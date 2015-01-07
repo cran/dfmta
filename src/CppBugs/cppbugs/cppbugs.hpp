@@ -21,6 +21,7 @@
 #include <cppbugs/mcmc.deterministic.hpp>
 #include <cppbugs/mcmc.model.hpp>
 #include <cppbugs/distributions/mcmc.normal.hpp>
+#include <cppbugs/distributions/mcmc.multivariate.normal.hpp>
 #include <cppbugs/distributions/mcmc.uniform.hpp>
 #include <cppbugs/distributions/mcmc.gamma.hpp>
 #include <cppbugs/distributions/mcmc.exponential.hpp>

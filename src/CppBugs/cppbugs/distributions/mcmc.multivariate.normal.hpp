@@ -50,7 +50,7 @@ namespace cppbugs {
 
     template<typename U, typename V>
     MultivariateNormal<T>& dmvnorm(/*const*/ U&& mu, /*const*/ V&& sigma) {
-      Stochastic::likelihood_functor = new MultivariateNormalLikelihiood<T,U>(DynamicStochastic<T>::value,mu,sigma);
+      Stochastic::likelihood_functor = new MultivariateNormalLikelihiood<T,U,V>(DynamicStochastic<T>::value,mu,sigma);
       return *this;
     }
   };
@@ -62,7 +62,7 @@ namespace cppbugs {
 
     template<typename U, typename V>
     ObservedMultivariateNormal<T>& dmvnorm(/*const*/ U&& mu, /*const*/ V&& sigma) {
-      Stochastic::likelihood_functor = new MultivariateNormalLikelihiood<T,U>(Observed<T>::value,mu,sigma);
+      Stochastic::likelihood_functor = new MultivariateNormalLikelihiood<T,U,V>(Observed<T>::value,mu,sigma);
       return *this;
     }
   };

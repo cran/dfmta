@@ -16,7 +16,7 @@
 #include <boost/random/exponential_distribution.hpp>
 #include <cstdlib>
 
-#ifdef SUPPORT_OPENMP
+#ifdef _OPENMP
 #include<omp.h>
 #endif
 
@@ -956,7 +956,7 @@ static void dfmta_simu(int* has_time, int* ra_pm /* true for RA, false for PM */
 
     struct results results(*ndose, *ngroups);
 
-#ifdef SUPPORT_OPENMP
+#ifdef _OPENMP
     if(*nthreads > 0)
       omp_set_num_threads(*nthreads);
     else

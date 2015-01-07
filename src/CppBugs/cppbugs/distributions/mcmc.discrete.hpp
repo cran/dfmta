@@ -35,7 +35,7 @@ namespace cppbugs {
   public:
     DiscreteLikelihiood(const T& x, const U& p): x_(x), p_(p) { }
     inline double calc() const {
-      if(x_ < 0 || x_ >= (int)p_.n_elem || p_[x_] <= 0)
+      if(x_ < 0 || x_ >= (int)p_.n_elem)
         return -std::numeric_limits<double>::infinity();
       return log_approx(p_[x_]) - log_approx(arma::accu(p_));
     }

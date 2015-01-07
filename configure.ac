@@ -26,11 +26,20 @@ CXXPICFLAGS="${CXX1XXPICFLAGS}"
 
 AC_LANG([C++])
 
-AX_CHECK_COMPILE_FLAG([-ftree-vectorize], [PKG_CXXFLAGS="-ftree-vectorize"])
+PKG_CXXFLAGS=
+PKG_LIBS=
+
+AX_CHECK_COMPILE_FLAG([-ftree-vectorize],
+        [PKG_CXXFLAGS="${PKG_CXXFLAGS} -ftree-vectorize"])
 AX_CHECK_COMPILE_FLAG([-funsafe-math-optimizations],
         [PKG_CXXFLAGS="${PKG_CXXFLAGS} -funsafe-math-optimizations"])
 
+AC_OPENMP
+PKG_CXXFLAGS="${PKG_CXXFLAGS} ${OPENMP_CXXFLAGS}"
+PKG_LIBS="${PKG_LIBS} ${OPENMP_CXXFLAGS}"
+
 AC_SUBST(PKG_CXXFLAGS)
+AC_SUBST(PKG_LIBS)
 
 AC_CONFIG_FILES([src/Makevars])
 AC_OUTPUT

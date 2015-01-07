@@ -44,9 +44,13 @@ namespace cppbugs {
   public:
     ObservedExponentialCensored(const T& value): Observed<T>(value) {}
 
-    template<typename U, typename V>
-    ObservedExponentialCensored<T>& dexpcens(/*const*/ U&& lambda, /*const*/ V&& delta) {
-      Stochastic::likelihood_functor = new ExponentialCensoredLikelihiood<T,U,V>(Observed<T>::value,lambda,delta);
+    template<typename U>
+    ObservedExponentialCensored<T>& dexpcens(/*const*/ U&& lambda) {
+      Stochastic::likelihood_functor =
+        new ExponentialCensoredLikelihiood<typename std::remove_reference<T>::type::first_type, U, typename std::remove_reference<T>::type::second_type>
+           (Observed<T>::value.first,
+            lambda,
+            Observed<T>::value.second);
       return *this;
     }
   };
