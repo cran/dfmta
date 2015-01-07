@@ -42,23 +42,23 @@ namespace cppbugs {
     template<typename U>
     void bernoulli_jump(RngBase& rng, U& value, const double scale) {
       double jump_probability = 1.0 - pow(0.5,scale);
-      arma::uvec flips = arma::find(arma::randu<arma::vec>(value.n_elem) < jump_probability);
-      for(unsigned int i = 0; i < flips.n_elem; i++) {
-        value[ flips[i] ] = value[ flips[i] ] ? 0 : 1;
+      for(unsigned int i = 0; i < value.n_elem; i++) {
+        if(rng.uniform() < jump_probability)
+          value[ i ] = !value[ i ];
       }
     }
 
     void bernoulli_jump(RngBase& rng, int& value, const double scale) {
       double jump_probability = 1.0 - pow(0.5,scale);
       if(rng.uniform() < jump_probability) {
-        value = value ? 0 : 1;
+        value = !value;
       }
     }
 
     void bernoulli_jump(RngBase& rng, double& value, const double scale) {
       double jump_probability = 1.0 - pow(0.5,scale);
       if(rng.uniform() < jump_probability) {
-        value = value ? 0 : 1;
+        value = !value;
       }
     }
 

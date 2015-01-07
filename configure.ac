@@ -1,0 +1,36 @@
+m4_define([DFMTA_VERSION],
+          m4_esyscmd([cat DESCRIPTION | grep Version | cut -b 10- | tr -d '\n']))
+AC_INIT([dfmta], [DFMTA_VERSION], [eldamjh@gmail.com])
+
+AC_CONFIG_MACRO_DIR([tools])
+
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  echo "could not determine R_HOME"
+  exit 1
+fi
+
+AC_DEFUN([AX_GET_R_CONF_VAR],[$1=`"${R_HOME}/bin/R" CMD config $1`])
+AX_GET_R_CONF_VAR([CC])
+AX_GET_R_CONF_VAR([CFLAGS])
+AX_GET_R_CONF_VAR([CPPFLAGS])
+AX_GET_R_CONF_VAR([CXXCPP])
+AX_GET_R_CONF_VAR([CXX1X])
+AX_GET_R_CONF_VAR([CXX1XSTD])
+AX_GET_R_CONF_VAR([CXX1XFLAGS])
+AX_GET_R_CONF_VAR([CXX1XXPICFLAGS])
+
+CXX="${CXX1X} ${CXX1XSTD}"
+CXXFLAGS="${CXX1XFLAGS} ${CXX1XPICFLAGS}"
+CXXPICFLAGS="${CXX1XXPICFLAGS}"
+
+AC_LANG([C++])
+
+AX_CHECK_COMPILE_FLAG([-ftree-vectorize], [PKG_CXXFLAGS="-ftree-vectorize"])
+AX_CHECK_COMPILE_FLAG([-funsafe-math-optimizations],
+        [PKG_CXXFLAGS="${PKG_CXXFLAGS} -funsafe-math-optimizations"])
+
+AC_SUBST(PKG_CXXFLAGS)
+
+AC_CONFIG_FILES([src/Makevars])
+AC_OUTPUT

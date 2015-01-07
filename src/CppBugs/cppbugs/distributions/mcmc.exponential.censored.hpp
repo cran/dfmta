@@ -33,9 +33,9 @@ namespace cppbugs {
   public:
     ExponentialCensoredLikelihiood(const T& x, const U& lambda, const V& delta): x_(x), lambda_(lambda), delta_(delta) { dimension_check(x_, lambda_, delta_); }
     inline double calc() const {
-      return arma::any(x_ < 0) ?
-	-std::numeric_limits<double>::infinity() :
-	arma::accu(arma::schur(delta_, log_approx(lambda_)) - arma::schur(lambda_, x_));
+      if(!arma::all(x_ > 0))
+        return -std::numeric_limits<double>::infinity();
+      return arma::accu(arma::schur(delta_, log_approx(lambda_)) - arma::schur(lambda_, x_));
     }
   };
 

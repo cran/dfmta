@@ -1,6 +1,6 @@
-mta_sim = function(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, prior_eff, poisson_rate=1, n,
+mtaBin_sim = function(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, prior_eff, poisson_rate=1, n,
                    cohort_start=3, cohort=3, tite=TRUE, time_full=0, method="MTA-RA", s_1=function(n_cur){0.2}, 
-                   s_2=0.07, cycle=0, nsim, c_tox=0.90, c_eff=0.40, seed=1907){
+                   s_2=0.07, cycle=0, nsim, c_tox=0.90, c_eff=0.40, seed=8, threads=0){
   val_s_1 = sapply(0:(n-1),s_1)
   n_ptox = length(p_tox)
   n_prior_tox = length(prior_tox)
@@ -27,7 +27,7 @@ mta_sim = function(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, 
       (is.matrix(prior_eff) == TRUE && (dim(prior_eff)[1] != ngroups || dim(prior_eff)[2] != ndose)) ){
     stop("The entered vector or matrix of initial guessed efficacy probabities is of wrong length.")
   }
-  
+
   ngroups = as.integer(ngroups)[1]
   ndose = as.integer(ndose)[1]
   p_tox = as.double(p_tox)
@@ -49,6 +49,7 @@ mta_sim = function(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, 
   val_s_1 = as.double(val_s_1)
   s_2 = as.double(s_2)[1]
   seed = as.integer(seed)[1]
+  threads = as.integer(threads)[1]
 
   for(i in 1:n_ptox){
     if(p_tox[i] < 0 || p_tox[i] > 1 || p_eff[i] < 0 || p_eff[i] > 1){
@@ -84,7 +85,7 @@ mta_sim = function(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, 
     mta = .C(C_dfmta_simu, tite=tite, TRUE, ngoups=ngroups, ndose=ndose, p_tox=p_tox, p_eff=p_eff, tox_max=tox_max, eff_min=eff_min,
                      prior_tox=prior_tox, prior_eff=prior_eff, poisson_rate=poisson_rate, n=n,
                      time_full=time_full, cycle=cycle, cohort_start=cohort_start, cohort=cohort, nsim=nsim, c_tox=c_tox, 
-                     c_eff=c_eff, val_s_1=val_s_1, s_2=s_2, seed=seed,
+                     c_eff=c_eff, val_s_1=val_s_1, s_2=s_2, seed=seed, threads=threads,
 
                      inconc=inconc, n_pat_dose=n_pat_dose, rec_dose=rec_dose, n_pat_tot=n_pat_tot, n_tox=n_tox, n_eff=n_eff,
                      tox_tot=tox_tot, eff_tot=eff_tot, n_pat_mtd=n_pat_mtd, duration=duration)
@@ -93,7 +94,7 @@ mta_sim = function(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, 
     mta = .C(C_dfmta_simu, tite=tite, FALSE, ngoups=ngroups, ndose=ndose, p_tox=p_tox, p_eff=p_eff, tox_max=tox_max, eff_min=eff_min,
                      prior_tox=prior_tox, prior_eff=prior_eff, poisson_rate=poisson_rate, n=n,
                      time_full=time_full, cycle=cycle, cohort_start=cohort_start, cohort=cohort, nsim=nsim, c_tox=c_tox, 
-                     c_eff=c_eff, val_s_1=val_s_1, s_2=s_2, seed=seed,
+                     c_eff=c_eff, val_s_1=val_s_1, s_2=s_2, seed=seed, threads=threads,
 
                      inconc=inconc, n_pat_dose=n_pat_dose, rec_dose=rec_dose, n_pat_tot=n_pat_tot, n_tox=n_tox, n_eff=n_eff,
                      tox_tot=tox_tot, eff_tot=eff_tot, n_pat_mtd=n_pat_mtd, duration=duration)
@@ -142,14 +143,14 @@ mta_sim = function(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, 
              n_eff=matrix(n_eff, nrow=ngroups),
              duration=duration)
              
-  class(res) = "mta_sim"
+  class(res) = "mtaBin_sim"
 
   return(res)
 }
 
 
 
-print.mta_sim = function(x, dgt = 2, ...) {
+print.mtaBin_sim = function(x, dgt = 2, ...) {
   cat("Call:\n")
   print(x$call) 
 
@@ -187,21 +188,25 @@ print.mta_sim = function(x, dgt = 2, ...) {
 }
 
 
-mta_next = function(ngroups=1, group_cur=1, ndose, prior_tox, prior_eff, tox_max, eff_min, cohort_start, cohort, 
-                    final=FALSE, method="MTA-RA", s_1=function(n_cur){0.2}, s_2=0.07, group_pat, id_dose, toxicity, tite=TRUE, 
-                    efficacy=0, time_follow=0, time_eff=0, time_full=0, cycle=0, c_tox=0.90, c_eff=0.40, seed = 1907){
+mtaBin_next = function(ngroups=1, group_cur=1, ndose, prior_tox, prior_eff, tox_max, eff_min, cohort_start, cohort, 
+                    final=FALSE, method="MTA-RA", s_1=function(n_cur){0.2}, s_2=0.07, group_pat=rep(1,length(id_dose)), id_dose, toxicity, tite=TRUE, 
+                    efficacy=0, time_follow=0, time_eff=0, time_full=0, cycle=0, c_tox=0.90, c_eff=0.40, seed = 8){
     
   # time_eff = time-to-efficacy with +infini if no efficacy 
   # Fill the efficacy for the group for which the estimation are not done or put NA  
   pat_incl_group = c()
   for(ng in 1:ngroups){
     pat_incl_group = c(pat_incl_group, length(which(group_pat==ng)))
-  }  
-  pat_tot = sum(pat_incl_group)              
+  }
+  pat_tot = sum(pat_incl_group)
   pat_group = which(group_pat==group_cur)
-  startup_end = ifelse((sum(toxicity[pat_group]) > 0 || cdose==ndose), 1, -1)
   group = c(group_pat, group_cur)
-  cdose = id_dose[pat_group[pat_incl_group[group_cur]]]
+  if(pat_incl_group[group_cur] > 0) {
+    cdose = id_dose[pat_group[pat_incl_group[group_cur]]]
+  }
+  else {
+    cdose = 0
+  }
   time_cur = 0
   time_incl = -time_follow
   val_s_1 = s_1(pat_incl_group[group_cur])
@@ -280,7 +285,7 @@ mta_next = function(ngroups=1, group_cur=1, ndose, prior_tox, prior_eff, tox_max
   val_s_1 = as.double(val_s_1)[1]
   s_2 = as.double(s_2)[1]
   seed = as.integer(seed)[1]
-  startup_end = as.integer(startup_end)
+  in_startup = as.logical(numeric(1))
   
   if(group_cur < 1 || group_cur > ngroups){
     stop("The group number for which the next optimal dose should be estimated is not comprised between 1 and ngroups.")
@@ -302,11 +307,100 @@ mta_next = function(ngroups=1, group_cur=1, ndose, prior_tox, prior_eff, tox_max
   
   mta = .C(C_dfmta_next, tite=tite, ra_pm=ra_pm , ngroups=ngroups, ndose=ndose, tox_max=tox_max, eff_min=eff_min,
            prior_tox=prior_tox, prior_eff=prior_eff, time_full=time_full, cycle=cycle, cohort_start=cohort_start, 
-           cohort=cohort, c_tox=c_tox, c_eff=c_eff, val_s_1=val_s_1, s_2=s_2, seed=seed, cdose=cdose, startup_end=startup_end, 
+           cohort=cohort, c_tox=c_tox, c_eff=c_eff, val_s_1=val_s_1, s_2=s_2, seed=seed, cdose=cdose, 
            time_cur=time_cur, pat_incl_group=pat_incl_group, id_dose=id_dose, group=group, time_eff=time_eff, 
            time_incl=time_incl, efficacy=efficacy, toxicity=toxicity, final=final,
-           pi=pi, ptox_inf=ptox_inf, resp=resp, qeff_inf=qeff_inf, proba_tau=proba_tau,
+           in_startup=in_startup, pi=pi, ptox_inf=ptox_inf, resp=resp, qeff_inf=qeff_inf, proba_tau=proba_tau,
            NAOK=TRUE)
+           
+  pi=mta$pi
+  ptox_inf=mta$ptox_inf
+  resp=mta$resp
+  qeff_inf=mta$qeff_inf 
+  proba_tau=mta$proba_tau
+  group=group+1
+  id_dose=id_dose+1
+  cdose=mta$cdose+1
+  in_startup=mta$in_startup
+           
+  pat_tot = sum(pat_incl_group) 
+  n_pat_dose_tot = numeric(ndose)
+  n_tox_tot = numeric(ndose)
+  n_eff = numeric(ndose)
+  if(ngroups > 1){
+    n_pat_dose = matrix(0, nrow=2, ncol=ndose)
+    n_tox = matrix(0, nrow=2, ncol=ndose)
+    for(i in 1:pat_tot){
+      n_pat_dose_tot[id_dose[i]] = n_pat_dose_tot[id_dose[i]]+1
+      n_pat_dose[ifelse(group_pat[i]==group_cur,1,2),id_dose[i]] = n_pat_dose[ifelse(group_pat[i]==group_cur,1,2),id_dose[i]]+1
+      n_tox[ifelse(group_pat[i]==group_cur,1,2),id_dose[i]] = n_tox[ifelse(group_pat[i]==group_cur,1,2),id_dose[i]]+toxicity[i]
+      n_tox_tot[id_dose[i]] = n_tox_tot[id_dose[i]]+toxicity[i]
+      if(group_pat[i]==group_cur){
+        n_eff[id_dose[i]] = n_eff[id_dose[i]]+efficacy[i]
+      }
+    }
+  
+    if(!in_startup){
+      tab_tox = rbind(prior_tox, n_pat_dose_tot, n_tox[1,], n_tox[2,], pi, ptox_inf)
+      tab_eff = rbind(prior_eff, n_pat_dose[1,], n_eff, resp, 1-qeff_inf, proba_tau)
+      tab_res = rbind(tab_tox,tab_eff)
+  
+      dimnames(tab_res) = list(
+          c("Prior toxicities", 
+          "Total number of patients included",
+          paste("Number of observed toxicities in group ", group_cur, sep=""), 
+          "Number of observed toxicities in other groups", 
+          "Estimated toxicity probabilities", 
+          paste("P(toxicity probability < ", tox_max, ")", sep=""),    
+          "Prior efficacies", 
+          paste("Number of patients included in group ", group_cur, sep=""),
+          paste("Number of observed efficacies in group ", group_cur, sep=""),
+          "Estimated efficacy probabilities",
+          paste("P(efficacy probability > to ", eff_min, ")", sep=""),
+          paste("Plateau probabilities in group ", group_cur, sep="")),
+          doses=1:ndose)
+    }
+    else{
+      tab_res = rbind(prior_tox, prior_eff, n_pat_dose[1,], n_tox[1,], n_eff)
+      dimnames(tab_res) = list(c("Prior toxicities", "Prior efficacies", 
+      paste("Number of patients included in group ", group_cur, sep=""),
+      paste("Number of observed toxicities in group ", group_cur, sep=""),
+      paste("Number of observed efficacies in group ", group_cur, sep="")),
+      doses=1:ndose)
+    }
+  }
+  else{
+    for(i in 1:pat_tot){
+      n_pat_dose_tot[id_dose[i]] = n_pat_dose_tot[id_dose[i]]+1
+      n_tox_tot[id_dose[i]] = n_tox_tot[id_dose[i]]+toxicity[i]
+      n_eff[id_dose[i]] = n_eff[id_dose[i]]+efficacy[i]
+    }
+  
+    if(!in_startup){
+      tab_res = rbind(prior_tox, prior_eff, n_pat_dose_tot, n_tox_tot, pi, ptox_inf, n_eff, resp, 1-qeff_inf, proba_tau)
+  
+      dimnames(tab_res) = list(
+          c("Prior toxicities", 
+          "Prior efficacies",
+          "Number of patients included",
+          "Number of observed toxicities", 
+          "Estimated toxicity probabilities", 
+          paste("P(toxicity probability < ", tox_max, ")", sep=""),   
+          "Number of observed efficacies",
+          "Estimated efficacy probabilities",
+          paste("P(efficacy probability > to ", eff_min, ")", sep=""),
+          "Plateau probabilities"),
+          doses=1:ndose)
+    }
+    else{
+      tab_res = rbind(prior_tox, prior_eff, n_pat_dose_tot, n_tox_tot, n_eff)
+      dimnames(tab_res) = list(c("Prior toxicities", "Prior efficacies", 
+      "Number of patients included",
+      "Number of observed toxicities",
+      "Number of observed efficacies"),
+      doses=1:ndose)
+    }
+  }
 
   res = list(call = match.call(),
              tite=tite, 
@@ -325,25 +419,29 @@ mta_next = function(ngroups=1, group_cur=1, ndose, prior_tox, prior_eff, tox_max
              c_tox=c_tox,
              c_eff=c_eff,
              seed=seed, 
-             cdose=mta$cdose+1, 
-             startup_end=mta$startup_end, 
-             time_cur=time_cur,
+             cdose=cdose, 
+             in_startup=in_startup, 
              pat_incl_group=pat_incl_group, 
-             id_dose=id_dose+1, 
+             id_dose=id_dose, 
              group_cur=group_cur,
              group_pat=group_pat,
-             group=group+1, 
+             group=group, 
              time_eff=time_eff, 
-             time_incl=time_incl,
+             time_follow=time_follow,
              efficacy=efficacy, 
              toxicity=toxicity,
-             pi=mta$pi, 
-             ptox_inf=mta$ptox_inf, 
-             resp=mta$resp, 
-             qeff_inf=mta$qeff_inf, 
-             proba_tau=mta$proba_tau)
+             pi=pi, 
+             ptox_inf=ptox_inf, 
+             resp=resp, 
+             qeff_inf=qeff_inf, 
+             proba_tau=proba_tau,
+             pat_tot=pat_tot, 
+             n_pat_dose_tot=n_pat_dose_tot,
+             n_tox_tot=n_tox_tot,
+             n_eff=n_eff,
+             tab_res=tab_res)
              
-  class(res) = "mta_next"
+  class(res) = "mtaBin_next"
 
   return(res)
 }
@@ -351,94 +449,14 @@ mta_next = function(ngroups=1, group_cur=1, ndose, prior_tox, prior_eff, tox_max
 
 
 
-print.mta_next = function(x, dgt = 2, ...) {
+print.mtaBin_next = function(x, dgt = 2, ...) {
   cat("Call:\n")
   print(x$call) 
-  
-  pat_tot = sum(x$pat_incl_group) 
-  n_pat_dose_tot = numeric(x$ndose)
-  n_tox_tot = numeric(x$ndose)
-  n_eff = numeric(x$ndose)
-  
-  if(x$ngroups > 1){
-    n_pat_dose = matrix(0, nrow=2, ncol=x$ndose)
-    n_tox = matrix(0, nrow=2, ncol=x$ndose)
-    for(i in 1:pat_tot){
-      n_pat_dose_tot[x$id_dose[i]] = n_pat_dose_tot[x$id_dose[i]]+1
-      n_pat_dose[ifelse(x$group_pat[i]==x$group_cur,1,2),x$id_dose[i]] = n_pat_dose[ifelse(x$group_pat[i]==x$group_cur,1,2),x$id_dose[i]]+1
-      n_tox[ifelse(x$group_pat[i]==x$group_cur,1,2),x$id_dose[i]] = n_tox[ifelse(x$group_pat[i]==x$group_cur,1,2),x$id_dose[i]]+x$toxicity[i]
-      n_tox_tot[x$id_dose[i]] = n_tox_tot[x$id_dose[i]]+x$toxicity[i]
-      if(x$group_pat[i]==x$group_cur){
-        n_eff[x$id_dose[i]] = n_eff[x$id_dose[i]]+x$efficacy[i]
-      }
-    }
-  
-    if(x$startup_end != -1){
-      tab_tox = rbind(x$prior_tox, n_pat_dose_tot, n_tox[1,], n_tox[2,], x$pi, x$ptox_inf)
-      tab_eff = rbind(x$prior_eff, n_pat_dose[1,], n_eff, x$resp, 1-x$qeff_inf, x$proba_tau)
-      tab_res = rbind(tab_tox,tab_eff)
-  
-      dimnames(tab_res) = list(
-          c("Prior toxicities", 
-          "Total number of patients included",
-          paste("Number of observed toxicities in group ", x$group_cur, sep=""), 
-          "Number of observed toxicities in other groups", 
-          "Estimated toxicity probabilities", 
-          paste("P(toxicity probability < ", x$tox_max, ")", sep=""),    
-          "Prior efficacies", 
-          paste("Number of patients included in group ", x$group_cur, sep=""),
-          paste("Number of observed efficacies in group ", x$group_cur, sep=""),
-          "Estimated efficacy probabilities",
-          paste("P(efficacy probability > to ", x$eff_min, ")", sep=""),
-          paste("Plateau probabilities in group ", x$group_cur, sep="")),
-          doses=1:x$ndose)
-    }
-    else{
-      tab_res = rbind(x$prior_tox, x$prior_eff, n_pat_dose[1,], n_tox[1,], n_eff)
-      dimnames(tab_res) = list(c("Prior toxicities", "Prior efficacies", 
-      paste("Number of patients included in group ", x$group_cur, sep=""),
-      paste("Number of observed toxicities in group ", x$group_cur, sep=""),
-      paste("Number of observed efficacies in group ", x$group_cur, sep="")),
-      doses=1:x$ndose)
-    }
-  }
-  else{
-    for(i in 1:pat_tot){
-      n_pat_dose_tot[x$id_dose[i]] = n_pat_dose_tot[x$id_dose[i]]+1
-      n_tox_tot[x$id_dose[i]] = n_tox_tot[x$id_dose[i]]+x$toxicity[i]
-      n_eff[x$id_dose[i]] = n_eff[x$id_dose[i]]+x$efficacy[i]
-    }
-  
-    if(x$startup_end != -1){
-      tab_res = rbind(x$prior_tox, x$prior_eff, n_pat_dose_tot, n_tox_tot, x$pi, x$ptox_inf, n_eff, x$resp, 1-x$qeff_inf, x$proba_tau)
-  
-      dimnames(tab_res) = list(
-          c("Prior toxicities", 
-          "Prior efficacies",
-          "Number of patients included",
-          "Number of observed toxicities", 
-          "Estimated toxicity probabilities", 
-          paste("P(toxicity probability < ", x$tox_max, ")", sep=""),   
-          "Number of observed efficacies",
-          "Estimated efficacy probabilities",
-          paste("P(efficacy probability > to ", x$eff_min, ")", sep=""),
-          "Plateau probabilities"),
-          doses=1:x$ndose)
-    }
-    else{
-      tab_res = rbind(x$prior_tox, x$prior_eff, n_pat_dose_tot, n_tox_tot, n_eff)
-      dimnames(tab_res) = list(c("Prior toxicities", "Prior efficacies", 
-      "Number of patients included",
-      "Number of observed toxicities",
-      "Number of observed efficacies"),
-      doses=1:x$ndose)
-    }
-  }
    
-  print(round(tab_res, digits = dgt))   
+  print(round(x$tab_res, digits = dgt))   
   cat("\n") 
   cat("Current Group for dose determination:\t", x$group_cur,"\n")
-  cat("Start-up phase ended:\t", ifelse(x$startup_end==-1, "NO", "YES"),"\n")
+  cat("Start-up phase ended:\t", ifelse(x$in_startup, "NO", "YES"),"\n")
   if(x$cdose>0){
     if(x$final){
       cat(paste("RECOMMENDED DOSE at the end of the trial for group ",x$group_cur,":\t",x$cdose,"\n",sep=""), sep="")
@@ -453,22 +471,22 @@ print.mta_next = function(x, dgt = 2, ...) {
   cat("\n", "\n")
   cat("Number of groups:\t", x$ngroups,"\n")
   cat("Number of patients included in group ", x$group_cur, ":\t", x$pat_incl_group[x$group_cur], "\n")
-  cat("Total number of patients included:\t", pat_tot, "\n")
+  cat("Total number of patients included:\t", x$pat_tot, "\n")
   cat("Maximum sample size reached:\t", x$final,"\n")
   cat("Allocation method:\t", ifelse(x$ra_pm==TRUE, "MTA-RA", "MTA-PM"),"\n")
                
-  if(x$startup_end != -1){
+  if(!x$in_startup){
     cat("Toxicity upper bound:\t", x$tox_max, "\n")
     cat("Efficacy lower bound:\t", x$eff_min, "\n")
     cat("Toxicity threshold:\t", x$c_tox, "\n")
     cat("Efficacy threshold:\t", x$c_eff, "\n")
   } 
   if (x$tite) {
-    cat("Efficicy is a time-to-event \n")
+    cat("Efficacy is a time-to-event \n")
     cat("Full follow-up time:\t", x$time_full, "\n")
     cat("Minimum waiting time between two dose cohorts is of one cycle of ", x$cycle, "\n") 
   }
   else{
-    cat("Efficicy is binay \n")
+    cat("Efficacy is binary \n")
   }
 }

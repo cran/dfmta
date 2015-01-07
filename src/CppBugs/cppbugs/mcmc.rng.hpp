@@ -32,12 +32,32 @@ namespace cppbugs {
     boost::uniform_real<double> uniform_rng_dist_;
     boost::variate_generator<T&, boost::normal_distribution<double> > normal_rng_;
     boost::variate_generator<T&, boost::uniform_real<double> > uniform_rng_;
+    double next_norm_;
   public:
     SpecializedRng(): RngBase(),
                       normal_rng_dist_(0, 1), uniform_rng_dist_(0, 1),
                       normal_rng_(generator_, normal_rng_dist_),
-                      uniform_rng_(generator_, uniform_rng_dist_) {}
-    double normal() { return normal_rng_(); }
+                      uniform_rng_(generator_, uniform_rng_dist_) {
+      next_norm_ = NAN;
+    }
+
+    double normal() {
+      if(next_norm_ != next_norm_) {
+        double x, y, s;
+        do {
+          x = uniform_rng_()-0.5;
+          y = uniform_rng_()-0.5;
+          s = x*x+y*y;
+        } while(s > 0.25 || s == 0.);
+        double coef = sqrt(-2*log_approx(s*4)/s);
+        next_norm_ = coef*y;
+        return coef*x;
+      } else {
+        double r = next_norm_;
+        next_norm_ = NAN;
+        return r;
+      }
+    }
     double uniform() { return uniform_rng_(); }
   };
 

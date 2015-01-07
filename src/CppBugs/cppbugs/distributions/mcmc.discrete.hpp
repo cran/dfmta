@@ -27,7 +27,7 @@ namespace cppbugs {
 
   template<typename T, typename U, typename Enable = void>
   class DiscreteLikelihiood;
-  
+
   template<typename T, typename U>
   class DiscreteLikelihiood<T, U, typename std::enable_if<std::is_integral<typename std::remove_reference<T>::type>::value>::type> : public Likelihiood {
     const T& x_;
@@ -35,9 +35,9 @@ namespace cppbugs {
   public:
     DiscreteLikelihiood(const T& x, const U& p): x_(x), p_(p) { }
     inline double calc() const {
-      if(x_ < 0 || x_ >= (int)p_.n_elem)
+      if(x_ < 0 || x_ >= (int)p_.n_elem || p_[x_] <= 0)
         return -std::numeric_limits<double>::infinity();
-      return log_approx(p_[x_]);
+      return log_approx(p_[x_]) - log_approx(arma::accu(p_));
     }
   };
 
@@ -48,16 +48,16 @@ namespace cppbugs {
   public:
     DiscreteLikelihiood(const T& x, const U& p): x_(x), p_(p) { }
     inline double calc() const {
-      if(arma::any((x_ < 0) + (x_ >= (int)p_.n_elem)))
+      if(!arma::all(x_ >= 0) || !arma::all(x_ < (int)p_.n_elem))
         return -std::numeric_limits<double>::infinity();
       double sum = 0;
       for(unsigned i = 0; i < x_.n_elem; i++)
         sum += log_approx(p_[x_[i]]);
-      return sum;
+      return sum - x_.n_elem * log_approx(arma::accu(p_));
     }
   };
 
-  template<typename T> 
+  template<typename T>
   class Discrete : public DynamicStochastic<T> {
   public:
     Discrete(T value): DynamicStochastic<T>(value) {}

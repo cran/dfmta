@@ -3,7 +3,7 @@
 \alias{dfmta}
 \docType{package}
 \title{
-Phase I/II Dose-Finding Design for Molecularly Targeted Agent
+Phase I/II Dose-Finding Designs for Molecularly Targeted Agent
 }
 \description{
 This package provides functions to run simulations and to determine the next 
@@ -15,7 +15,7 @@ Molecularly Targeted Agent.
 Package: \tab dfmta\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
-Date: \tab 2014-09-23\cr
+Date: \tab 2014-12-01\cr
 License: \tab GPL-3\cr
 }
 }
@@ -23,5 +23,5 @@ License: \tab GPL-3\cr
 Jacques-Henri Jourdan and Marie-Karelle Riviere-Jourdan <eldamjh@gmail.com>
 }
 \references{
-Riviere, M-K., Yuan, Y., Jourdan, J-H., Dubois, F., and Zohar, S. (2014). Phase I/II Dose-Finding Design for Molecularly Targeted Agent: Plateau Determination using Adaptive Randomization. Statistics in medicine.
+Riviere, M-K., Yuan, Y., Jourdan, J-H., Dubois, F., and Zohar, S. Phase I/II Dose-Finding Design for Molecularly Targeted Agent: Plateau Determination using Adaptive Randomization.
 }
