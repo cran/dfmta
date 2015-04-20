@@ -301,13 +301,11 @@ estimations estimate_ra(const trial_data& trial_data, uint_fast64_t seed, int gr
       if(trial_data.time_cur - trial_data.time_incl[NPatientsCycle] < CYCLE)
         break;
 
-  const vec toxicity =
-    conv_to<vec>::from(ivec(trial_data.toxicity.data(), NPatientsCycle));
-  const vec dose_tox =
-    vec(trial_data.doseT.data(), ndose)
-    .elem(uvec(trial_data.dose_adm.data(), NPatientsCycle));
+  const vec toxicity = conv_to<vec>::from(trial_data.toxicity).head(NPatientsCycle);
+  const vec dose_tox = vec(trial_data.doseT)
+    .elem(conv_to<uvec>::from(trial_data.dose_adm).head(NPatientsCycle));
 
-  uvec in_group = find(ivec(trial_data.group.data(), NPatientsCycle) == group);
+  uvec in_group = find(conv_to<ivec>::from(trial_data.group).head(NPatientsCycle) == group);
   vec efficacy, weights;
   if(HAS_TIME) {
     efficacy = vec(in_group.size());
@@ -343,14 +341,13 @@ estimations estimate_ra(const trial_data& trial_data, uint_fast64_t seed, int gr
       }
     }
   } else
-    efficacy = conv_to<vec>::from(ivec(trial_data.efficacy.data(), NPatientsCycle).elem(in_group));
+    efficacy = conv_to<vec>::from(trial_data.efficacy).elem(in_group);
 
-  const uvec dose_adm_eff = uvec(trial_data.dose_adm.data(), NPatientsCycle).elem(in_group);
+  const uvec dose_adm_eff = conv_to<uvec>::from(trial_data.dose_adm).elem(in_group);
 
   vector<vec> dose_eff_tau;
   for(int tau = 0; tau < ndose; tau++)
-    dose_eff_tau.push_back(vec(doseE.data(), ndose)
-                           .elem(clamp(dose_adm_eff, 0, tau)));
+    dose_eff_tau.push_back(vec(doseE).elem(clamp(dose_adm_eff, 0, tau)));
 
   /* MCMC initalization and sampling */
   efficacy_parameters eff_params(0, 0.001, ndose-1);
@@ -491,13 +488,12 @@ estimations estimate_pm(const trial_data& trial_data, uint_fast64_t, int group, 
     if(trial_data.time_cur - trial_data.time_incl[NPatientsCycle] < CYCLE)
       break;
 
-  const vec toxicity =
-    conv_to<vec>::from(ivec(trial_data.toxicity.data(), NPatientsCycle));
-  const vec dose_tox =
-    vec(trial_data.doseT.data(), ndose)
-    .elem(uvec(trial_data.dose_adm.data(), NPatientsCycle));
+  const vec toxicity = conv_to<vec>::from(trial_data.toxicity).head(NPatientsCycle);
+  const vec dose_tox = vec(trial_data.doseT)
+    .elem(conv_to<uvec>::from(trial_data.dose_adm).head(NPatientsCycle));
 
-  uvec in_group = find(ivec(trial_data.group.data(), NPatientsCycle) == group);
+  uvec in_group =
+    find(conv_to<ivec>::from(trial_data.group).head(NPatientsCycle) == group);
   vec efficacy(in_group.size()), time_min_eff(in_group.size());
 
   int card2 = 0;
@@ -529,12 +525,11 @@ estimations estimate_pm(const trial_data& trial_data, uint_fast64_t, int group, 
       weights(i) = (card1+w_ini)/(card2+1);
     }
   }
-  const uvec dose_adm_eff = uvec(trial_data.dose_adm.data(), NPatientsCycle).elem(in_group);
+  const uvec dose_adm_eff = conv_to<uvec>::from(trial_data.dose_adm).elem(in_group);
 
   vector<vec> dose_eff_tau;
   for(int tau = 0; tau < ndose; tau++)
-    dose_eff_tau.push_back(vec(doseE.data(), ndose)
-                           .elem(clamp(dose_adm_eff, 0, tau)));
+    dose_eff_tau.push_back(vec(doseE).elem(clamp(dose_adm_eff, 0, tau)));
 
   /* MCMC initalization and sampling */
   efficacy_parameters eff_params(0, 0.001, ndose-1);
