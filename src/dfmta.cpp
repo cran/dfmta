@@ -3,6 +3,7 @@
 #define BOOST_DISABLE_ASSERTS
 #define ARMA_DONT_USE_BLAS
 #define ARMA_DONT_USE_LAPACK
+#define ARMA_32BIT_WORD
 #include <RcppArmadillo.h>
 
 #undef dnorm
@@ -255,7 +256,7 @@ void include_patient(trial_data& trial_data, const true_data& true_data, int gro
   std::uniform_real_distribution<double> uni_rng;
   trial_data.toxicity.push_back(uni_rng(trial_data.r) < pi_ij);
 
-  /* When will there be a efficacy ? */
+  /* When will there be an efficacy ? */
   double resp_ij = true_data.respV[trial_data.cdose[group]][group];
   if(HAS_TIME) {
     boost::exponential_distribution<double> exp_rng;
@@ -698,9 +699,7 @@ int find_next_dose(trial_data& trial_data, int group, double c_tox, double c_eff
 
     int dlt = 0;
     for(int pat = 0; pat < trial_data.pat_incl; pat++)
-      if(trial_data.group[pat] == group &&
-         trial_data.dose_adm[pat] == trial_data.cdose[group] &&
-         trial_data.toxicity[pat])
+      if(trial_data.group[pat] == group && trial_data.toxicity[pat])
         dlt++;
 
     if(dlt == 0 && trial_data.cdose[group] != ndose-1)

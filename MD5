@@ -1,12 +1,12 @@
-1c2f85fa45a4a28d7261723ff4ac320a *DESCRIPTION
+0e7a5251767c0ee0d51388d2013c3eaa *DESCRIPTION
 7c959b1446839aca2c030f7274f500ff *NAMESPACE
 fb706342a9f120b979aca06fd1bbc651 *R/dfmta.R
 c3cded853a2388ad53569a7105d1c1e3 *cleanup
-e39a2d159b2807c2ba79243a651c4da4 *configure
+0f8fcdec818ee73450d18a7db7ea4158 *configure
 667163148e6a172f7ef47b1d087ccab1 *configure.ac
 d41d8cd98f00b204e9800998ecf8427e *configure.win
 009166d60ca0052bc8ddc2913816b342 *man/dfmta-package.Rd
-3d0e789871eba04f675adbb2c87d8fe2 *man/mtaBin_next.Rd
+69dd8ff24d36ed40fcfc360481251cf1 *man/mtaBin_next.Rd
 54bf7411bbc5bf6164d3c8a87886e7da *man/mtaBin_sim.Rd
 848f72e0aa5dd7aa117db4d8f658eacf *src/CppBugs/README.rst
 b3c17b9c0c98e095377e2d7a955228ba *src/CppBugs/cppbugs/cppbugs.hpp
@@ -33,5 +33,5 @@ a6cf1702b45e136213d952d18323deeb *src/CppBugs/cppbugs/mcmc.rng.hpp
 e16c392579b242b2f76f3b1874d0417c *src/CppBugs/cppbugs/mcmc.stochastic.hpp
 e1b3e9933d448ec022134c8cbf9f232b *src/Makevars.in
 21ff969dcaf4f15368115b4d4b5096ef *src/Makevars.win
-bcad9a4b6c1ceced9dbff90db44bffce *src/dfmta.cpp
+3e9d69b17a35d9bff08244601b05f125 *src/dfmta.cpp
 62d4c6b5d55207cfac24e4417ccaa1c5 *tools/ax_check_compile_flag.m4

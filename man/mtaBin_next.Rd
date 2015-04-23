@@ -101,7 +101,7 @@ s_1=function(n_cur){0.2*(1-n_cur/60)}
 #       toxicity=tox_1, tite=TRUE, time_follow=time_follow_1, 
 #       time_eff=time_eff_1, time_full=7, cycle=3, c_tox=0.90, c_eff=0.40)
 #mta1
-   
+
 # One group, binary                
 #mta2 = mtaBin_next(ngroups=1, group_cur=1, ndose=6, prior_tox=prior_tox, 
 #       prior_eff=prior_eff, tox_max=0.35, eff_min=0.20, cohort_start=3, 
