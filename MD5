@@ -1,8 +1,8 @@
-0e7a5251767c0ee0d51388d2013c3eaa *DESCRIPTION
+4c1878868b5c7d5d8545bc6c8a329629 *DESCRIPTION
 7c959b1446839aca2c030f7274f500ff *NAMESPACE
 fb706342a9f120b979aca06fd1bbc651 *R/dfmta.R
 c3cded853a2388ad53569a7105d1c1e3 *cleanup
-0f8fcdec818ee73450d18a7db7ea4158 *configure
+70fa0bcb3b82cc59dd861a6264f16757 *configure
 667163148e6a172f7ef47b1d087ccab1 *configure.ac
 d41d8cd98f00b204e9800998ecf8427e *configure.win
 009166d60ca0052bc8ddc2913816b342 *man/dfmta-package.Rd
@@ -33,5 +33,5 @@ a6cf1702b45e136213d952d18323deeb *src/CppBugs/cppbugs/mcmc.rng.hpp
 e16c392579b242b2f76f3b1874d0417c *src/CppBugs/cppbugs/mcmc.stochastic.hpp
 e1b3e9933d448ec022134c8cbf9f232b *src/Makevars.in
 21ff969dcaf4f15368115b4d4b5096ef *src/Makevars.win
-3e9d69b17a35d9bff08244601b05f125 *src/dfmta.cpp
+475af8d1a30e14b34cf60d94b48adec5 *src/dfmta.cpp
 62d4c6b5d55207cfac24e4417ccaa1c5 *tools/ax_check_compile_flag.m4

@@ -861,7 +861,7 @@ static void dfmta_next(int* has_time, int* ra_pm /* true for RA, false for PM */
   *cdose = find_next_dose(trial_data, group_cur, *c_tox, *c_eff, *final, &estim);
   *in_startup = trial_data.startup_end[group_cur] == -1;
 
-  if(!in_startup)
+  if(!*in_startup)
     for(int d = 0; d < *ndose; d++) {
       pi[d] = estim.pi[d];
       ptox_inf[d] = estim.ptox_inf[d];
