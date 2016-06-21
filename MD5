@@ -1,8 +1,8 @@
-b61fd912dcdc15915edb7f35333ce303 *DESCRIPTION
+3d72dbac1c657feeea4385249515f472 *DESCRIPTION
 7c959b1446839aca2c030f7274f500ff *NAMESPACE
 fb706342a9f120b979aca06fd1bbc651 *R/dfmta.R
 c3cded853a2388ad53569a7105d1c1e3 *cleanup
-2bf8bfd6bcb1fbb2c33b6e54c9c5a522 *configure
+e22ccee827d88e07f43c74d97a942a4e *configure
 667163148e6a172f7ef47b1d087ccab1 *configure.ac
 d41d8cd98f00b204e9800998ecf8427e *configure.win
 009166d60ca0052bc8ddc2913816b342 *man/dfmta-package.Rd
@@ -24,7 +24,7 @@ af03787885a66b969cf345ecd451ba1f *src/CppBugs/cppbugs/distributions/mcmc.uniform
 c903410d67b7b02c9f8089fadb8f7401 *src/CppBugs/cppbugs/mcmc.dynamic.hpp
 c3386047912345c297d443fc05960efa *src/CppBugs/cppbugs/mcmc.dynamic.stochastic.hpp
 fed6268025eabb0efea526566c4688df *src/CppBugs/cppbugs/mcmc.jump.hpp
-460d7ef95bea5513698d67f31ec41d0e *src/CppBugs/cppbugs/mcmc.math.hpp
+c1209897ce490e767d4cdacb234e3223 *src/CppBugs/cppbugs/mcmc.math.hpp
 3fed40110abb10c74877845919192342 *src/CppBugs/cppbugs/mcmc.model.hpp
 7a632601ae8b12cf1ce7cdd7e3560f16 *src/CppBugs/cppbugs/mcmc.object.hpp
 f8e02ec52332b300c312f442a0496316 *src/CppBugs/cppbugs/mcmc.observed.hpp
@@ -33,5 +33,5 @@ a6cf1702b45e136213d952d18323deeb *src/CppBugs/cppbugs/mcmc.rng.hpp
 e16c392579b242b2f76f3b1874d0417c *src/CppBugs/cppbugs/mcmc.stochastic.hpp
 e1b3e9933d448ec022134c8cbf9f232b *src/Makevars.in
 21ff969dcaf4f15368115b4d4b5096ef *src/Makevars.win
-475af8d1a30e14b34cf60d94b48adec5 *src/dfmta.cpp
+6b11b7a8defbc9a3f3a7db56484e0665 *src/dfmta.cpp
 62d4c6b5d55207cfac24e4417ccaa1c5 *tools/ax_check_compile_flag.m4

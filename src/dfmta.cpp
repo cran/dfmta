@@ -3,7 +3,6 @@
 #define BOOST_DISABLE_ASSERTS
 #define ARMA_DONT_USE_BLAS
 #define ARMA_DONT_USE_LAPACK
-#define ARMA_32BIT_WORD
 #include <RcppArmadillo.h>
 
 #undef dnorm
