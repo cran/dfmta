@@ -1,4 +1,4 @@
-3d72dbac1c657feeea4385249515f472 *DESCRIPTION
+255b93c8c83af3bf0c6a5fa6ae8b8334 *DESCRIPTION
 7c959b1446839aca2c030f7274f500ff *NAMESPACE
 fb706342a9f120b979aca06fd1bbc651 *R/dfmta.R
 c3cded853a2388ad53569a7105d1c1e3 *cleanup
@@ -33,5 +33,5 @@ a6cf1702b45e136213d952d18323deeb *src/CppBugs/cppbugs/mcmc.rng.hpp
 e16c392579b242b2f76f3b1874d0417c *src/CppBugs/cppbugs/mcmc.stochastic.hpp
 e1b3e9933d448ec022134c8cbf9f232b *src/Makevars.in
 21ff969dcaf4f15368115b4d4b5096ef *src/Makevars.win
-6b11b7a8defbc9a3f3a7db56484e0665 *src/dfmta.cpp
+1b4d0511221a387a1b1ae6db076b0f6c *src/dfmta.cpp
 62d4c6b5d55207cfac24e4417ccaa1c5 *tools/ax_check_compile_flag.m4

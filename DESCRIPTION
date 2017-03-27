@@ -1,8 +1,8 @@
 Package: dfmta
 Type: Package
 Title: Phase I/II Adaptive Dose-Finding Design for MTA
-Version: 1.3-4
-Date: 2016-06-20
+Version: 1.4
+Date: 2017-03-21
 Author: Marie-Karelle Riviere and Jacques-Henri Jourdan
 Maintainer: Marie-Karelle Riviere <eldamjh@gmail.com>
 Copyright: All files in src/CppBugs are copyright Whit Armstrong. All
@@ -18,6 +18,6 @@ Depends: R (>= 3.1.0)
 LinkingTo: RcppArmadillo (>= 0.7.100.3.1), BH (>= 1.55), RcppProgress
         (>= 0.2.1), Rcpp
 NeedsCompilation: yes
-Packaged: 2016-06-20 16:24:19 UTC; jjourdan
+Packaged: 2017-03-21 19:20:48 UTC; jjourdan
 Repository: CRAN
-Date/Publication: 2016-06-21 22:42:47
+Date/Publication: 2017-03-27 14:05:41 UTC

@@ -1049,8 +1049,10 @@ static const R_CMethodDef cMethods[] = {
   {NULL, NULL, 0}
 };
 
-void R_init_dfmta(DllInfo *info) {
-  R_registerRoutines(info, cMethods, NULL, NULL, NULL);
+void R_init_dfmta(DllInfo *dll) {
+  R_registerRoutines(dll, cMethods, NULL, NULL, NULL);
+  R_useDynamicSymbols(dll, FALSE);
+  R_forceSymbols(dll, TRUE);
 }
 
 }
