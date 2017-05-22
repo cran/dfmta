@@ -49,7 +49,7 @@ struct toxicity_parameters {
 
   template<typename U>
   void proba_tox(const U& dose_tox, U& out) {
-    out = 1-1/(1+exp_approx(beta0 + beta1*dose_tox));
+    out = 1-1/(1+cppbugs::exp_approx(beta0 + beta1*dose_tox));
   }
 };
 
@@ -66,7 +66,7 @@ struct efficacy_parameters {
   template<typename U>
   void responseRate(const vector<U>& dose_eff_tau, U& out) const {
     unsigned tau = min((int)dose_eff_tau.size()-1, max(0, this->tau));
-    out = 1-1/(1+exp_approx(gamma0 + gamma1*dose_eff_tau[tau]));
+    out = 1-1/(1+cppbugs::exp_approx(gamma0 + gamma1*dose_eff_tau[tau]));
   }
 };
 
