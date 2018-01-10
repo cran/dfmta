@@ -6,9 +6,9 @@
 \code{mtaBin_sim} is used to generate simulation replicates of Phase I/II clinical trial for Molecularly Targeted Agent using the design proposed by Riviere et al. entitled "Phase I/II Dose-Finding Design for Molecularly Targeted Agent: Plateau Determination using Adaptive Randomization".
 }
 \usage{
-mtaBin_sim(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox, 
-prior_eff, poisson_rate=1, n, cohort_start=3, cohort=3, tite=TRUE, time_full, 
-method="MTA-RA", s_1=function(n_cur){0.2}, s_2=0.07, cycle, nsim, c_tox=0.90, 
+mtaBin_sim(ngroups=1, ndose, p_tox, p_eff, tox_max, eff_min, prior_tox,
+prior_eff, poisson_rate=1, n, cohort_start=3, cohort=3, tite=TRUE, time_full,
+method="MTA-RA", s_1=function(n_cur){0.2}, s_2=0.07, cycle, nsim, c_tox=0.90,
 c_eff=0.40, seed=8, threads=0)
 }
 \arguments{
@@ -83,27 +83,28 @@ prior_eff2 = rbind(prior_eff, prior_eff)
 s_1=function(n_cur){0.2}
 n=60
 
-# UNCOMMENT THOSE EXAMPLES
+\donttest{
 # With only one group and efficacy as time-to-event
-#sim1 = mtaBin_sim(ngroups=1, ndose=6, p_tox= p_tox_sc1, p_eff= p_eff_sc1_g1,
-#       tox_max=0.35, eff_min=0.20, prior_tox=prior_tox, prior_eff= prior_eff,
-#       poisson_rate=0.28, n=60, cohort_start=3, cohort=3, tite=TRUE,
-#       time_full=7, cycle=3, nsim=1)
-#sim1
+sim1 = mtaBin_sim(ngroups=1, ndose=6, p_tox= p_tox_sc1, p_eff= p_eff_sc1_g1,
+       tox_max=0.35, eff_min=0.20, prior_tox=prior_tox, prior_eff= prior_eff,
+       poisson_rate=0.28, n=60, cohort_start=3, cohort=3, tite=TRUE,
+       time_full=7, cycle=3, nsim=1)
+sim1
 
 # With only one group and efficacy binary
-#sim2 = mtaBin_sim(ngroups=1, ndose=6, p_tox= p_tox_sc1, p_eff= p_eff_sc1_g1,
-#       tox_max=0.35, eff_min=0.20, prior_tox=prior_tox, prior_eff= prior_eff,
-#       n=n, cohort_start=3, cohort=3, tite=FALSE, method="MTA-RA",
-#       s_1=function(n_cur){0.2*(1-n_cur/n)}, nsim=1)
-#sim2
+sim2 = mtaBin_sim(ngroups=1, ndose=6, p_tox= p_tox_sc1, p_eff= p_eff_sc1_g1,
+       tox_max=0.35, eff_min=0.20, prior_tox=prior_tox, prior_eff= prior_eff,
+       n=n, cohort_start=3, cohort=3, tite=FALSE, method="MTA-RA",
+       s_1=function(n_cur){0.2*(1-n_cur/n)}, nsim=1)
+sim2
 
 # With only two groups and efficacy as time-to-event
-#sim3 = mtaBin_sim(ngroups=2, ndose=6, p_tox= p_tox_sc2, p_eff= p_eff_sc2_g2,
-#               tox_max=0.35, eff_min=0.20, prior_tox=prior_tox,
-#               prior_eff= prior_eff2, poisson_rate=c(0.40,0.25) , n=60,
-#               cohort_start=3, cohort=3, tite=TRUE, time_full=7,
-#               method="MTA-PM", s_2=0.07, cycle=3, nsim=1, c_tox=0.90,
-#               c_eff=0.40)
-#sim3
+sim3 = mtaBin_sim(ngroups=2, ndose=6, p_tox= p_tox_sc2, p_eff= p_eff_sc2_g2,
+               tox_max=0.35, eff_min=0.20, prior_tox=prior_tox,
+               prior_eff= prior_eff2, poisson_rate=c(0.40,0.25) , n=60,
+               cohort_start=3, cohort=3, tite=TRUE, time_full=7,
+               method="MTA-PM", s_2=0.07, cycle=3, nsim=1, c_tox=0.90,
+               c_eff=0.40)
+sim3
+}
 }

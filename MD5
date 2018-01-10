@@ -1,13 +1,13 @@
-fcb93397d7deb342de8d193eac3560ac *DESCRIPTION
+1b7cad130a4aa30d2ab7c549953fd8a5 *DESCRIPTION
 7c959b1446839aca2c030f7274f500ff *NAMESPACE
 fb706342a9f120b979aca06fd1bbc651 *R/dfmta.R
 c3cded853a2388ad53569a7105d1c1e3 *cleanup
-81136975151abfd5e2f62f8fb1a02e2c *configure
+291fab81fccd789793700b88cbcb0f79 *configure
 3737ba21a215249918b808d61e993439 *configure.ac
 d41d8cd98f00b204e9800998ecf8427e *configure.win
 009166d60ca0052bc8ddc2913816b342 *man/dfmta-package.Rd
-69dd8ff24d36ed40fcfc360481251cf1 *man/mtaBin_next.Rd
-3c73060b959dc7fdb4bd802cc740811f *man/mtaBin_sim.Rd
+911f90edcb502ef6f47767eb44b3511b *man/mtaBin_next.Rd
+9d35d10adfefaef08b0d4efd758b13d2 *man/mtaBin_sim.Rd
 848f72e0aa5dd7aa117db4d8f658eacf *src/CppBugs/README.rst
 b3c17b9c0c98e095377e2d7a955228ba *src/CppBugs/cppbugs/cppbugs.hpp
 9184a963df19f06eb0113186b76c5997 *src/CppBugs/cppbugs/distributions/mcmc.bernoulli.hpp
