@@ -3,25 +3,23 @@
 \alias{dfmta}
 \docType{package}
 \title{
-Phase I/II Dose-Finding Designs for Molecularly Targeted Agent
+\packageTitle{dfmta}
 }
 \description{
-This package provides functions to run simulations and to determine the next 
-optimal dose in on-going trials for Phase I/II dose-finding design for 
-Molecularly Targeted Agent.
+\packageDescription{dfmta}
 }
 \details{
-\tabular{ll}{
-Package: \tab dfmta\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2014-12-01\cr
-License: \tab GPL-3\cr
-}
+
+The DESCRIPTION file:
+\packageDESCRIPTION{dfmta}
+\packageIndices{dfmta}
 }
 \author{
-Jacques-Henri Jourdan and Marie-Karelle Riviere-Jourdan <eldamjh@gmail.com>
+\packageAuthor{dfmta}
+
+Maintainer: \packageMaintainer{dfmta}
 }
 \references{
 Riviere, M-K., Yuan, Y., Jourdan, J-H., Dubois, F., and Zohar, S. Phase I/II Dose-Finding Design for Molecularly Targeted Agent: Plateau Determination using Adaptive Randomization.
 }
+\keyword{ package design survival }
