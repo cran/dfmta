@@ -1,13 +1,13 @@
-740680dcb3077020c239d274f9328b27 *DESCRIPTION
+4bb02c4d16e33e9bb465900423c8fdcd *DESCRIPTION
 7c959b1446839aca2c030f7274f500ff *NAMESPACE
 fb706342a9f120b979aca06fd1bbc651 *R/dfmta.R
-ad72d56011b30f199e067af7670424f5 *build/partial.rdb
+d35a0d630c8b156f610e27aaaeeab882 *build/partial.rdb
 c3cded853a2388ad53569a7105d1c1e3 *cleanup
-0f8d24fb4e057a4bba5cb371dfe8858a *configure
+a8c8391d4ecb6762765ee505019e9f37 *configure
 058964684dbbb2afe2a36b8d3b776ef0 *configure.ac
 d41d8cd98f00b204e9800998ecf8427e *configure.win
 22d80dc261604c419486c9bd7bdeae89 *man/dfmta-package.Rd
-911f90edcb502ef6f47767eb44b3511b *man/mtaBin_next.Rd
+a8ef287eae646937d15872c92dabfcf9 *man/mtaBin_next.Rd
 9d35d10adfefaef08b0d4efd758b13d2 *man/mtaBin_sim.Rd
 848f72e0aa5dd7aa117db4d8f658eacf *src/CppBugs/README.rst
 b3c17b9c0c98e095377e2d7a955228ba *src/CppBugs/cppbugs/cppbugs.hpp

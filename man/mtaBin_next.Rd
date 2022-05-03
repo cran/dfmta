@@ -59,7 +59,7 @@ An object of class "mtaBin_next" is returned, consisting of determination of the
 \item{cdose}{NEXT RECOMMENDED DOSE.}
 \item{ngroups}{Number of groups.}
 \item{final}{Maximim sample size reached.}
-\item{}{Allocation method.}
+\item{method}{Allocation method.}
 \item{tox_max}{Toxicity upper bound (if the start-up ended).}
 \item{eff_min}{Efficacy lower bound (if the start-up ended).}
 \item{c_tox}{Toxicity threshold (if the start-up ended).}
