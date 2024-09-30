@@ -27,7 +27,7 @@ c_eff=0.40, seed=8, threads=0)
   \item{tite}{A boolean indicating if the efficacy is considered as a time-to-event (default value TRUE), or if it is a binary outcome (FALSE).}
   \item{time_full}{Full follow-up time window. This argument is used only if tite=TRUE.}
   \item{method}{A character string to specify the method for dose allocation (<=> plateau determination). The default method "MTA-RA" use adaptive randomization on posterior probabilities for the plateau location. Method based on difference in efficacy probabilities is specified by "MTA-PM".}
-  \item{s_1}{A function depending on the number of patients included used for adaptive randomization in plateau determination, only used if the estimation method chosen is "MTA-RA". The default function is function(n_cur){0.2}.}
+  \item{s_1}{A function depending on the number of patients included used for adaptive randomization in plateau determination, only used if the estimation method chosen is "MTA-RA". The default function is \code{function(n_cur){0.2}}.}
   \item{s_2}{Cutoff for plateau determination, only used if the estimation method chosen is "MTA-PM". Can be seen as the minimal efficacy difference of practical importance. The default value is 0.07.}
   \item{cycle}{Minimum waiting time between two dose cohorts (usually a toxicity cycle). This argument is used only if tite=TRUE.}
   \item{nsim}{Number of simulations.}

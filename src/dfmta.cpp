@@ -503,7 +503,7 @@ estimations estimate_pm(const trial_data& trial_data, uint_fast64_t, int group, 
       efficacy(i) = 1;
       time_min_eff(i) = trial_data.time_eff[in_group(i)];
       if(time_follow == TIMEFULL)
-	card2++;
+        card2++;
     } else {
       efficacy(i) = 0;
       time_min_eff(i) = time_follow;
@@ -870,10 +870,10 @@ static void dfmta_next(int* has_time, int* ra_pm /* true for RA, false for PM */
     }
   }
   catch (std::logic_error &e) {
-    error("Internal error in dfmta (details: %s)", e.what());
+    Rf_error("Internal error in dfmta (details: %s)", e.what());
   }
   catch (...) {
-    error("Internal error in dfmta");
+    Rf_error("Internal error in dfmta");
   }
 }
 
@@ -1037,7 +1037,7 @@ static void dfmta_simu(int* has_time, int* ra_pm /* true for RA, false for PM */
 
   if(false) {
   errlbl:
-    error("Internal error in dfmta (details: %s)", errstr.c_str());
+    Rf_error("Internal error in dfmta (details: %s)", errstr.c_str());
   }
 }
 

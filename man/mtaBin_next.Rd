@@ -24,7 +24,7 @@ seed = 8)
   \item{cohort}{Cohort size for the model phase.}
   \item{final}{A boolean with value TRUE if the trial is finished and the recommended dose for further phases should be given, or FALSE (default value) if the dose determination is performed for the next cohort of patients.}
   \item{method}{A character string to specify the method for dose allocation (<=> plateau determination). The default method "MTA-RA" use adaptive randomization on posterior probabilities for the plateau location. Method based on difference in efficacy probabilities is specified by "MTA-PM".}
-  \item{s_1}{A function depending on the number of patients included used for adaptive randomization in plateau determination, only used if the estimation method chosen is "MTA-RA". The default function is function(n_cur,n){0.2}.}
+  \item{s_1}{A function depending on the number of patients included used for adaptive randomization in plateau determination, only used if the estimation method chosen is "MTA-RA". The default function is \code{function(n_cur,n){0.2}}.}
   \item{s_2}{Cutoff value for plateau determination, only used if the estimation method chosen is "MTA-PM". Can be seen as the minimal efficacy difference of practical importance. The default value is 0.07.}
   \item{group_pat}{A vector indicating the group number associated with each patient included in the trial.}
   \item{id_dose}{A vector indicating the dose levels administered to each patient included in the trial. Must be of same length as \code{group_pat}.}

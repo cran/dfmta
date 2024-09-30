@@ -1,6 +1,6 @@
 m4_define([DFMTA_VERSION],
           m4_esyscmd([cat DESCRIPTION | grep Version | cut -b 10- | tr -d '\n']))
-AC_INIT([dfmta], [DFMTA_VERSION], [eldamjh@gmail.com])
+AC_INIT([dfmta], [DFMTA_VERSION], [jacques-henri.jourdan@cnrs.fr])
 
 AC_CONFIG_MACRO_DIR([tools])
 
@@ -14,14 +14,6 @@ AC_DEFUN([AX_GET_R_CONF_VAR],[$1=`"${R_HOME}/bin/R" CMD config $1`])
 AX_GET_R_CONF_VAR([CC])
 AX_GET_R_CONF_VAR([CFLAGS])
 AX_GET_R_CONF_VAR([CPPFLAGS])
-AX_GET_R_CONF_VAR([CXX11])
-AX_GET_R_CONF_VAR([CXX11STD])
-AX_GET_R_CONF_VAR([CXX11FLAGS])
-AX_GET_R_CONF_VAR([CXX11PICFLAGS])
-
-CXX="${CXX11} ${CXX11STD}"
-CXXFLAGS="${CXX11FLAGS} ${CXX11PICFLAGS}"
-CXXPICFLAGS="${CXX11PICFLAGS}"
 
 AC_LANG([C++])
 
