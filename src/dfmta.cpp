@@ -810,71 +810,66 @@ static void dfmta_next(int* has_time, int* ra_pm /* true for RA, false for PM */
                        double* pi, double* ptox_inf,
                        double* resp2, double* qeff_inf,
                        double* proba_tau) {
-  try {
+  BEGIN_RCPP // Handle C++ exceptions properly
 
-  CYCLE = *cycle;
-  TARG_SUP = *targ_sup;
-  EFF_MIN = *eff_min;
-  HAS_TIME = *has_time;
-  if(HAS_TIME) TIMEFULL = *time_full;
+    CYCLE = *cycle;
+    TARG_SUP = *targ_sup;
+    EFF_MIN = *eff_min;
+    HAS_TIME = *has_time;
+    if(HAS_TIME) TIMEFULL = *time_full;
 
-  int pat_incl = 0;
-  for(int g = 0; g < *ngroups; g++)
-    pat_incl += pat_incl_group[g];
-  int group_cur = group[pat_incl];
+    int pat_incl = 0;
+    for(int g = 0; g < *ngroups; g++)
+      pat_incl += pat_incl_group[g];
+    int group_cur = group[pat_incl];
 
-  vector<double> doseTV(doseTV0, doseTV0+*ndose);
-  vector<vector<double>> doseEV(*ndose, vector<double>(*ngroups, 0));
-  for(int i = 0; i < *ndose; i++)
-    doseEV[i][group_cur] = doseEV0[i];
+    vector<double> doseTV(doseTV0, doseTV0+*ndose);
+    vector<vector<double>> doseEV(*ndose, vector<double>(*ngroups, 0));
+    for(int i = 0; i < *ndose; i++)
+      doseEV[i][group_cur] = doseEV0[i];
 
-  COHORT_START = *cohort_start;
-  COHORT = *cohort;
+    COHORT_START = *cohort_start;
+    COHORT = *cohort;
 
-  estimator est = *ra_pm ? estimate_ra : estimate_pm;
-  vector<double> _s_1;
-  if(!*final) {
-    _s_1.resize(pat_incl_group[group_cur]+1);
-    _s_1[pat_incl_group[group_cur]] = *s_1;
-  }
-  trial_data trial_data(est, doseTV, doseEV, *ngroups, *s_2, _s_1, *seed);
-  trial_data.pat_incl = pat_incl;
-  trial_data.cdose = vector<int>(*ngroups, 0);
-  trial_data.cdose[group_cur] = *cdose;
-  trial_data.startup_end = vector<int>(*ngroups, 0);
-  // Assume the startup has not ended : if it has, it will detect it.
-  trial_data.startup_end[group_cur] = -1;
-  trial_data.time_cur = *time_cur;
-  trial_data.pat_incl_group = vector<int>(pat_incl_group, pat_incl_group+*ngroups);
-  trial_data.dose_adm = vector<unsigned int>(dose_adm, dose_adm+pat_incl);
-  trial_data.group = vector<int>(group, group+pat_incl);
-  if(HAS_TIME) {
-    trial_data.time_eff = vector<double>(time_eff, time_eff+pat_incl);
-    trial_data.time_incl = vector<double>(time_incl, time_incl+pat_incl);
-  } else {
-    trial_data.efficacy = vector<int>(efficacy, efficacy+pat_incl);
-  }
-  trial_data.toxicity = vector<int>(toxicity, toxicity+pat_incl);
-
-  estimations estim(*ndose);
-  *cdose = find_next_dose(trial_data, group_cur, *c_tox, *c_eff, *final, &estim);
-  *in_startup = trial_data.startup_end[group_cur] == -1;
-
-  if(!*in_startup)
-    for(int d = 0; d < *ndose; d++) {
-      pi[d] = estim.pi[d];
-      ptox_inf[d] = estim.ptox_inf[d];
-      resp2[d] = estim.resp2[d];
-      qeff_inf[d] = estim.qeff_inf[d];
-      proba_tau[d] = estim.proba_tau[d];
+    estimator est = *ra_pm ? estimate_ra : estimate_pm;
+    vector<double> _s_1;
+    if(!*final) {
+      _s_1.resize(pat_incl_group[group_cur]+1);
+      _s_1[pat_incl_group[group_cur]] = *s_1;
     }
-  }
-  catch (std::logic_error &e) {
-    Rf_error("Internal error in dfmta (details: %s)", e.what());
-  }
-  catch (...) {
-    Rf_error("Internal error in dfmta");
-  }
+    trial_data trial_data(est, doseTV, doseEV, *ngroups, *s_2, _s_1, *seed);
+    trial_data.pat_incl = pat_incl;
+    trial_data.cdose = vector<int>(*ngroups, 0);
+    trial_data.cdose[group_cur] = *cdose;
+    trial_data.startup_end = vector<int>(*ngroups, 0);
+    // Assume the startup has not ended : if it has, it will detect it.
+    trial_data.startup_end[group_cur] = -1;
+    trial_data.time_cur = *time_cur;
+    trial_data.pat_incl_group = vector<int>(pat_incl_group, pat_incl_group+*ngroups);
+    trial_data.dose_adm = vector<unsigned int>(dose_adm, dose_adm+pat_incl);
+    trial_data.group = vector<int>(group, group+pat_incl);
+    if(HAS_TIME) {
+      trial_data.time_eff = vector<double>(time_eff, time_eff+pat_incl);
+      trial_data.time_incl = vector<double>(time_incl, time_incl+pat_incl);
+    } else {
+      trial_data.efficacy = vector<int>(efficacy, efficacy+pat_incl);
+    }
+    trial_data.toxicity = vector<int>(toxicity, toxicity+pat_incl);
+
+    estimations estim(*ndose);
+    *cdose = find_next_dose(trial_data, group_cur, *c_tox, *c_eff, *final, &estim);
+    *in_startup = trial_data.startup_end[group_cur] == -1;
+
+    if(!*in_startup)
+      for(int d = 0; d < *ndose; d++) {
+        pi[d] = estim.pi[d];
+        ptox_inf[d] = estim.ptox_inf[d];
+        resp2[d] = estim.resp2[d];
+        qeff_inf[d] = estim.qeff_inf[d];
+        proba_tau[d] = estim.proba_tau[d];
+      }
+
+  VOID_END_RCPP
 }
 
 static R_NativePrimitiveArgType dfmta_simu_args[] =
@@ -912,8 +907,6 @@ static void dfmta_simu(int* has_time, int* ra_pm /* true for RA, false for PM */
                        int* n_pat_tot, int* n_tox, int* n_eff,
                        int* tox_tot, int* eff_tot, int* n_pat_mtd,
                        double* duration) {
-  string errstr;
-
   {
     struct true_data true_data;
 
@@ -1004,8 +997,7 @@ static void dfmta_simu(int* has_time, int* ra_pm /* true for RA, false for PM */
 
       } catch (std::logic_error &e) {
 #pragma omp critical
-        { err = true;
-          errstr = e.what(); }
+        err = true;
       } catch(...) {
 #pragma omp critical
         err = true;
@@ -1037,7 +1029,7 @@ static void dfmta_simu(int* has_time, int* ra_pm /* true for RA, false for PM */
 
   if(false) {
   errlbl:
-    Rf_error("Internal error in dfmta (details: %s)", errstr.c_str());
+    (Rf_error)("Internal error in dfmta.");
   }
 }
 
